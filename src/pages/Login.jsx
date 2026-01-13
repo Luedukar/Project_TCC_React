@@ -13,6 +13,8 @@ export default function Login() {
     try {
       await login(email, senha);
       alert("Login realizado com sucesso!");
+      setEmail("");
+      setSenha("");
     } catch (err) {
       setErro(err.message);
     }
