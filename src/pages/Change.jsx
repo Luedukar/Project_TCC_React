@@ -1,7 +1,9 @@
 import { useEffect } from "react";
 
-function Change() {
+export default function Change() {
   useEffect(() => {
+    /* O useEffect é executado apenas depois que o elemento do return é renderizado */
+    /* Caso contrario, os itens de document.querySelector ainda não estariam disponíveis */
     const form_cadastro = document.querySelector(".form_cadastro");
     const form_login = document.querySelector(".form_login");
     const painel_right = document.querySelector(".painel_right");
@@ -10,6 +12,7 @@ function Change() {
     const RegisterBtn = document.querySelector(".register-btn");
     const LoginBtn = document.querySelector(".login-btn");
 
+    /* Se registerBtn for clicado, executa o bloco abaixo*/
     if (RegisterBtn) {
       RegisterBtn.addEventListener("click", () => {
         alter_box.classList.add(
@@ -46,6 +49,7 @@ function Change() {
       });
     }
 
+    /* Se LoginBtn for clicado, executa o bloco abaixo*/
     if (LoginBtn) {
       LoginBtn.addEventListener("click", () => {
         alter_box.classList.remove(
@@ -97,5 +101,3 @@ function Change() {
     </div>
   );
 }
-
-export default Change;
