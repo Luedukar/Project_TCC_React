@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { login } from "../services/authService";
 import SocialIcon from "../components/SocialIcon";
+import Form from "../components/Form";
 
 /* Armazena os valores dos campos de email e senha, também possivel "valores de erro" */
 /* export (exporta uma função, variavel, etc.), export default (exporta um componente)*/
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
+  const [formData, setFormData] = useState({
+    email: "",
+    senha: "",
+  });
   const [erro, setErro] = useState("");
 
   /* Faz o envio do formulario quando eu usar o type submit */
@@ -17,11 +20,13 @@ export default function Login() {
 
     /* envia as informações de email e senha para a função login */
     try {
-      await login(email, senha);
+      await login(formData.email, formData.senha);
       /* Caso sucesso, exibe mensagem e limpa os campos */
       alert("Login realizado com sucesso!");
-      setEmail("");
-      setSenha("");
+      setFormData({
+        email: "",
+        senha: "",
+      });
       console.log("TOKEN SALVO:", localStorage.getItem("token"));
       /* Caso erro, exibe a mensagem de erro */
     } catch (err) {
@@ -34,33 +39,23 @@ export default function Login() {
       <form className="w-full" onSubmit={handleSubmit}>
         {" "}
         {/* Define que esse é o formulario a ser enviado */}
-        <h1 className="m-[-10px] text-4xl">Login</h1>
-        <div className="relative w-full pt-[35px]">
-          <input
-            className="w-full rounded-lg bg-zinc-200 pt-[8px] pr-[30px] pb-[8px] pl-[20px] text-sm font-medium text-zinc-800 outline-none"
-            placeholder="Username"
-            /* Esse é o campo e-mail */
-            value={email}
-            type="email"
-            /* Qualquer alteração que eu fizer neste campo, executa o setEmail */
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <i className="bx-user absolute top-[76%] right-[15px] translate-y-[-50%] bg-transparent text-xl"></i>
-        </div>
-        <div className="relative w-full pt-[25px]">
-          <input
-            className="w-full rounded-lg bg-zinc-200 pt-[8px] pr-[40px] pb-[8px] pl-[20px] text-sm font-medium text-zinc-800 outline-none"
-            type="password"
-            placeholder="password"
-            /* Esse é o campo senha */
-            value={senha}
-            /* Qualquer alteração que eu fizer neste campo, executa o setSenha */
-            onChange={(e) => setSenha(e.target.value)}
-            required
-          />
-          <i className="bx-lock absolute top-[70%] right-[15px] translate-y-[-50%] bg-transparent text-xl"></i>
-        </div>
+        <h1 className="m-[-10px] pb-[20px] text-4xl">Login</h1>
+        <Form
+          type="email"
+          placeholder="E-mail"
+          value={formData.email}
+          set={setFormData}
+          fieldName="email"
+          icon="bx-user"
+        />
+        <Form
+          type="password"
+          placeholder="Senha"
+          value={formData.senha}
+          set={setFormData}
+          fieldName="senha"
+          icon="bx-lock"
+        />
         <div className="pt-[15px] pb-[20px]">
           <a className="m-[30px] p-[20px] text-sm text-black" href="#">
             Forgot password?

@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { register } from "../services/authService";
+import Form from "../components/Form";
 
-function Cadastro() {
+export default function Cadastro() {
   const [mensagem, setMensagem] = useState("");
   const [tipoMensagem, setTipoMensagem] = useState("");
 
@@ -16,7 +18,7 @@ function Cadastro() {
   });
 
   /* Faz o envio do formulario quando eu usar o type submit */
-  const handleSubmit = async (e) => {
+  async function handleSubmit(e) {
     /* Impede do formulario recarregar */
     e.preventDefault();
 
@@ -27,27 +29,10 @@ function Cadastro() {
       return;
     }
 
-    /* Envia dados (método post) no formato json para o endereço abaixo (backend) */
-    const response = await fetch("http://localhost:3000/auth/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        /* Chave valor, por exemplo, nome é a chave e formData.nome é o valor dessa chave*/
-        nome: formData.nome,
-        sobrenome: formData.sobrenome,
-        email: formData.email,
-        senha: formData.senha,
-        celular: formData.celular,
-        dataNascimento: formData.dataNascimento,
-      }),
-    });
-
-    /* Aguarda uma resposta do backend */
-    const data = await response.json();
-    /* Se a respotas for um status de sucesso (ok) grava no setmensagem e setTipoMensagem e zera os campos de cadastro*/
-    if (response.ok) {
+    /* Envia as informações do formData para a função register */
+    try {
+      await register(formData);
+      /* Se a respotas for um status de sucesso (ok) grava no setmensagem e setTipoMensagem e zera os campos de cadastro*/
       setMensagem("Usuário criado com sucesso!");
       setTipoMensagem("sucesso");
 
@@ -61,120 +46,78 @@ function Cadastro() {
         dataNascimento: "",
       });
       /* Se não (se for uma mensagem de erro (!ok)) grava no setmensagem e setTipoMensagem */
-    } else {
-      setMensagem(data.erro);
+    } catch (error) {
+      setMensagem(error.message);
       setTipoMensagem("erro");
     }
-  };
+  }
 
   return (
     <div className="form_cadastro absolute right-[-100%] z-1 flex h-full items-center p-[40px] text-center text-black transition-all duration-[1200ms] ease-in-out sm:bottom-[0] sm:w-[50%]">
       <form className="w-full" onSubmit={handleSubmit}>
         {/* Define que esse é o formulario a ser enviado */}
-        <h1 className="m-[-10px] text-2xl">Crie seu cadastro</h1>
-        <div className="relative w-full pt-[30px]">
-          <input
-            className="w-full rounded-lg bg-zinc-200 pt-[8px] pr-[30px] pb-[8px] pl-[20px] text-sm font-medium text-zinc-800 outline-none"
-            type="text"
-            placeholder="Nome"
-            required
-            /* Esse é o campo nome */
-            value={formData.nome}
-            /* Qualquer alteração que eu fizer neste campo, executa o setNome */
-            onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
-          />
-          <i className="bx bx-user absolute top-[74%] right-[15px] translate-y-[-50%] bg-transparent text-xl"></i>
-        </div>
-        <div className="relative w-full pt-[20px]">
-          <input
-            className="w-full rounded-lg bg-zinc-200 pt-[8px] pr-[30px] pb-[8px] pl-[20px] text-sm font-medium text-zinc-800 outline-none"
-            type="text"
-            placeholder="Sobrenome"
-            required
-            /* Esse é o campo sobrenome */
-            value={formData.sobrenome}
-            /* Qualquer alteração que eu fizer neste campo, executa o setSobrenome */
-            onChange={(e) =>
-              setFormData({ ...formData, sobrenome: e.target.value })
-            }
-          />
-          <i className="bx bx-community absolute top-[70%] right-[15px] translate-y-[-50%] bg-transparent text-xl"></i>
-        </div>
-        <div className="relative w-full pt-[20px]">
-          <input
-            className="w-full rounded-lg bg-zinc-200 pt-[8px] pr-[30px] pb-[8px] pl-[20px] text-sm font-medium text-zinc-800 outline-none"
-            type="email"
-            placeholder="E-mail"
-            required
-            /* Esse é o campo e-mail */
-            value={formData.email}
-            /* Qualquer alteração que eu fizer neste campo, executa o setEmail */
-            onChange={(e) =>
-              setFormData({ ...formData, email: e.target.value })
-            }
-          />
-          <i className="bx bx-envelope absolute top-[70%] right-[15px] translate-y-[-50%] bg-transparent text-xl"></i>
-        </div>
-        <div className="relative w-full pt-[20px]">
-          <input
-            className="w-full rounded-lg bg-zinc-200 pt-[8px] pr-[40px] pb-[8px] pl-[20px] text-sm font-medium text-zinc-800 outline-none"
-            type="password"
-            placeholder="Senha"
-            required
-            /* Esse é o campo senha */
-            value={formData.senha}
-            /* Qualquer alteração que eu fizer neste campo, executa o setSenha */
-            onChange={(e) =>
-              setFormData({ ...formData, senha: e.target.value })
-            }
-          />
-          <i className="bx bx-lock absolute top-[70%] right-[15px] translate-y-[-50%] bg-transparent text-xl"></i>
-        </div>
-        <div className="relative w-full pt-[20px]">
-          <input
-            className="w-full rounded-lg bg-zinc-200 pt-[8px] pr-[40px] pb-[8px] pl-[20px] text-sm font-medium text-zinc-800 outline-none"
-            type="password"
-            placeholder="Confirme sua senha"
-            required
-            /* Esse é o campo confirmar senha */
-            value={formData.confirmarSenha}
-            /* Qualquer alteração que eu fizer neste campo, executa o setConfirmarSenha */
-            onChange={(e) =>
-              setFormData({ ...formData, confirmarSenha: e.target.value })
-            }
-          />
-          <i className="bx bx-lock-keyhole absolute top-[70%] right-[15px] translate-y-[-50%] bg-transparent text-xl"></i>
-        </div>
-        <div className="relative w-full pt-[20px]">
-          <input
-            className="w-full rounded-lg bg-zinc-200 pt-[8px] pr-[30px] pb-[8px] pl-[20px] text-sm font-medium text-zinc-800 outline-none"
-            type="tel"
-            placeholder="Número de celular"
-            required
-            /* Esse é o campo celular */
-            value={formData.celular}
-            /* Qualquer alteração que eu fizer neste campo, executa o setCelular */
-            onChange={(e) =>
-              setFormData({ ...formData, celular: e.target.value })
-            }
-          />
-          <i className="bx bx-phone absolute top-[70%] right-[15px] translate-y-[-50%] bg-transparent text-xl"></i>
-        </div>
-        <div className="relative w-full pt-[20px]">
-          <input
-            className="w-full rounded-lg bg-zinc-200 pt-[8px] pr-[50px] pb-[6px] pl-[20px] text-base font-medium text-zinc-800 outline-none"
-            type="date"
-            placeholder="Data de nascimento"
-            required
-            /* Esse é o campo data de nascimento */
-            value={formData.dataNascimento}
-            /* Qualquer alteração que eu fizer neste campo, executa o setDataNascimento */
-            onChange={(e) =>
-              setFormData({ ...formData, dataNascimento: e.target.value })
-            }
-          />
-          <i className="bx bx-birthday-cake absolute top-[68%] right-[15px] translate-y-[-50%] bg-transparent text-xl"></i>
-        </div>
+        <h1 className="m-[-10px] pb-[5px] text-2xl sm:pb-0">
+          Crie seu cadastro
+        </h1>
+        <Form
+          type="text"
+          placeholder="Nome"
+          value={formData.nome}
+          set={setFormData}
+          fieldName="nome"
+          icon="bx bx-user"
+        />
+        <Form
+          type="text"
+          placeholder="Sobrenome"
+          value={formData.sobrenome}
+          set={setFormData}
+          fieldName="sobrenome"
+          icon="bx bx-community"
+        />
+        <Form
+          type="email"
+          placeholder="E-mail"
+          value={formData.email}
+          set={setFormData}
+          fieldName="email"
+          icon="bx bx-envelope"
+        />
+        <Form
+          type="password"
+          placeholder="Senha"
+          value={formData.senha}
+          set={setFormData}
+          fieldName="senha"
+          icon="bx bx-lock"
+        />
+        <Form
+          type="password"
+          placeholder="Confirme sua senha"
+          value={formData.confirmarSenha}
+          set={setFormData}
+          fieldName="confirmarSenha"
+          icon="bx bx-lock-keyhole"
+        />
+        <Form
+          type="text"
+          placeholder="Celular"
+          value={formData.celular}
+          set={setFormData}
+          fieldName="celular"
+          icon="bx bx-phone"
+        />
+        <Form
+          type="date"
+          placeholder="Data de Nascimento"
+          value={formData.dataNascimento}
+          set={setFormData}
+          fieldName="dataNascimento"
+          text="text-base"
+          pr="45px"
+          icon="bx bx-birthday-cake"
+          iconTop="65%"
+        />
         <button
           className="mt-[20px] h-[48px] w-full cursor-pointer rounded-lg bg-blue-400 text-base font-semibold text-white shadow-[0_0_10px_rgba(0,0,0,0.1)]"
           type="submit"
@@ -182,6 +125,8 @@ function Cadastro() {
         >
           Criar cadastro
         </button>
+        {/* Exibe a mensagem de sucesso ou erro, se não houver mensagem, não exibe nada*/}
+        {/* Se sucesso (definido lá em cima), exibe mensagem verde; se erro, exibe mensagem vermelha */}
         {mensagem && (
           <div
             className={`mt-[5px] p-[5px] ${
@@ -192,11 +137,6 @@ function Cadastro() {
           </div>
         )}
       </form>
-
-      {/* Exibe a mensagem de sucesso ou erro, se não houver mensagem, não exibe nada*/}
-      {/* Se sucesso (definido lá em cima), exibe mensagem verde; se erro, exibe mensagem vermelha */}
     </div>
   );
 }
-
-export default Cadastro;
