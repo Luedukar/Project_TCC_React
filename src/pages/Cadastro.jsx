@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { register } from "../services/authService";
 import Form from "../components/Form";
 
 export default function Cadastro() {
+  const navigate = useNavigate();
   const [mensagem, setMensagem] = useState("");
   const [tipoMensagem, setTipoMensagem] = useState("");
 
@@ -125,6 +127,7 @@ export default function Cadastro() {
         >
           Criar cadastro
         </button>
+
         {/* Exibe a mensagem de sucesso ou erro, se não houver mensagem, não exibe nada*/}
         {/* Se sucesso (definido lá em cima), exibe mensagem verde; se erro, exibe mensagem vermelha */}
         {mensagem && (

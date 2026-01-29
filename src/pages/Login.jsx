@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { login } from "../services/authService";
 import SocialIcon from "../components/SocialIcon";
 import Form from "../components/Form";
@@ -6,6 +7,7 @@ import Form from "../components/Form";
 /* Armazena os valores dos campos de email e senha, também possivel "valores de erro" */
 /* export (exporta uma função, variavel, etc.), export default (exporta um componente)*/
 export default function Login() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     senha: "",
@@ -22,12 +24,13 @@ export default function Login() {
     try {
       await login(formData.email, formData.senha);
       /* Caso sucesso, exibe mensagem e limpa os campos */
-      alert("Login realizado com sucesso!");
+      // alert("Login realizado com sucesso!");
       setFormData({
         email: "",
         senha: "",
       });
       console.log("TOKEN SALVO:", localStorage.getItem("token"));
+      navigate("/home");
       /* Caso erro, exibe a mensagem de erro */
     } catch (err) {
       setErro(err.message);
