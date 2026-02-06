@@ -9,8 +9,10 @@ import Layout from "./components/Layout";
 /* Os componentes a serem renderizados no App */
 function App() {
   return (
+    // conecta o BrowserRouter para gerenciar as rotas (sem ele o react não consegue navegar entre paginas)
     <BrowserRouter>
       <Routes>
+        {/* Primeira rota: Rota pública (tela de login e cadastro) */}
         <Route
           path="/"
           element={
@@ -21,6 +23,7 @@ function App() {
             </Layout>
           }
         />
+        {/* Segunda rota: Rota privada (tela após o login), só vai se passar pelo PrivateRoute */}
         <Route path="/home" element={<PrivateRoute children={<Home />} />} />
       </Routes>
     </BrowserRouter>

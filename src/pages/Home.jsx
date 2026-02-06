@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import Produtos from "../components/Produtos";
 import { useNavigate } from "react-router-dom";
 
@@ -13,6 +13,67 @@ function Home() {
   function handleLogout() {
     localStorage.removeItem("token");
     navigate("/");
+  }
+
+  //função para buscar os produtos do usuário autenticado
+  async function buscarProdutos() {
+    // pega o token do localStorage e armazena na variavel token
+    const token = localStorage.getItem("token");
+
+    // se não houver token, retorna erro
+    if (!token) {
+      setErro("Usuário não autenticado");
+      return;
+    }
+
+    // envia o token para http://localhost:3000/auth/productsMe e aguarda uma resposta
+    try {
+      const response = await fetch("http://localhost:3000/auth/productsMe", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      // se a resposta não for ok, lança um erro
+      if (!response.ok) {
+        throw new Error("Token inválido");
+      }
+
+      // se for ok, extrai os dados retornados em json e atualiza o estado de produtos
+      const data = await response.json();
+      setProdutos(data);
+
+      // Extrai informações do usuário do primeiro produto (todas têm os mesmos dados)
+    } catch (err) {
+      setErro("Sessão expirada. Faça login novamente.");
+    }
+  }
+
+  // função para deletar um produto pelo idProduto
+  async function deleteProdutos(idProduto) {
+    // Validação se o idProduto foi fornecido e recebido corretamente (deletar quando não for mais necessário)
+    console.log("ID DO PRODUTO A SER DELETADO:", idProduto);
+    // envia a requisição (metodo post) de delete para o backend (http://localhost:3000/auth/delete) no formato json contendo no body o idProduto e espera uma resposta
+    const response = await fetch(`http://localhost:3000/auth/delete`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ idProduto }),
+    });
+    // valida o retorno da requisição (excluir quando não for mais necessário)
+    console.log("REQUISIÇÃO ENVIADA PARA DELETE:", response);
+
+    /* Recebe uma resposta do backend*/
+    const data = await response.json();
+    console.log("RESPOSTA DO DELETE:", data);
+    /* informa falha ou sucesso, caso seja um erro, impede quebra e exibe a mensagem de erro recebida */
+    if (!response.ok) {
+      throw new Error(data.erro);
+    } else {
+      // Recarrega os produtos após deletar
+      buscarProdutos();
+    }
   }
 
   /* Quando a pagina carregar, busca as informações do user
@@ -57,40 +118,6 @@ function Home() {
       }
     }
 
-    // outra função executada ao carregar a pagina, essa busca os produtos do usuário
-    async function buscarProdutos() {
-      // pega o token do localStorage e armazena na variavel token
-      const token = localStorage.getItem("token");
-
-      // se não houver token, retorna erro
-      if (!token) {
-        setErro("Usuário não autenticado");
-        return;
-      }
-
-      // envia o token para http://localhost:3000/auth/productsMe e aguarda uma resposta
-      try {
-        const response = await fetch("http://localhost:3000/auth/productsMe", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        // se a resposta não for ok, lança um erro
-        if (!response.ok) {
-          throw new Error("Token inválido");
-        }
-
-        // se for ok, extrai os dados retornados em json e atualiza o estado de produtos
-        const data = await response.json();
-        setProdutos(data);
-
-        // Extrai informações do usuário do primeiro produto (todas têm os mesmos dados)
-      } catch (err) {
-        setErro("Sessão expirada. Faça login novamente.");
-      }
-    }
-
     // chama as duas funções definidas acima para que sejam executadas ao carregar a pagina
     buscarInfos();
     buscarProdutos();
@@ -127,7 +154,7 @@ function Home() {
           </button>
         </div>
         <div className="mt-2">
-          <Produtos produtos={produtos} />
+          <Produtos produtos={produtos} deleteProdutos={deleteProdutos} />
         </div>
       </div>
     </div>
