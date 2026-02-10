@@ -55,3 +55,76 @@ export async function register(formData) {
 
   return data;
 }
+
+// Função responsavel por deleter pradoutos (recebe o id do produto a ser deletado)
+export async function deleteId(idProduto) {
+  // faz uma requisição para o backend enviando o ID do produto a ser deletado
+  const response = await fetch(`${API_URL}/delete`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ idProduto }),
+  });
+  // valida o retorno da requisição (excluir quando não for mais necessário)
+  console.log("REQUISIÇÃO ENVIADA PARA DELETE:", response);
+
+  /* Recebe uma resposta do backend*/
+  const data = await response.json();
+  //retorna o resultado
+  return data;
+}
+
+// Função responsavel por buscar os produtos de um determinado usuario
+export async function buscarProdutos() {
+  // pega o Token armazenado no localStorage
+  const token = localStorage.getItem("token");
+
+  // caso não tenha Token
+  if (!token) {
+    throw new Error("Usuário não autenticado");
+  }
+
+  // Faz uma requisição para o backend passando o Token
+  const response = await fetch(`${API_URL}/productsMe`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  // Se a reposta for erro
+  if (!response.ok) {
+    throw new Error("Token inválido");
+  }
+
+  // Se a resposta for sucesso
+  const data = await response.json();
+  return data;
+}
+
+// Função responsavel por buscar as informações do user
+export async function buscarInfoUsuario() {
+  // Pega o Token no localStorage
+  const token = localStorage.getItem("token");
+
+  // Se não tiver Token
+  if (!token) {
+    throw new Error("Usuário não autenticado");
+  }
+
+  // Faz a requisição para o backend passando o Token
+  const response = await fetch(`${API_URL}/me`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  // Se a resposta for um erro
+  if (!response.ok) {
+    throw new Error("Token inválido");
+  }
+
+  // Se a resposta for sucesso
+  const data = await response.json();
+  return data;
+}

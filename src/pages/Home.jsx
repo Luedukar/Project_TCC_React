@@ -1,6 +1,11 @@
 import { use, useEffect, useState } from "react";
 import Produtos from "../components/Produtos";
 import { useNavigate } from "react-router-dom";
+import {
+  deleteId,
+  buscarProdutos as buscarProdutosService,
+  buscarInfoUsuario,
+} from "../services/authService";
 
 function Home() {
   // estado para armazenar os produtos e informações do usuário (e erro caso necessario)
@@ -17,94 +22,38 @@ function Home() {
 
   //função para buscar os produtos do usuário autenticado
   async function buscarProdutos() {
-    // pega o token do localStorage e armazena na variavel token
-    const token = localStorage.getItem("token");
-
-    // se não houver token, retorna erro
-    if (!token) {
-      setErro("Usuário não autenticado");
-      return;
-    }
-
-    // envia o token para http://localhost:3000/auth/productsMe e aguarda uma resposta
+    //chama a função buscarprodutosService
     try {
-      const response = await fetch("http://localhost:3000/auth/productsMe", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      // se a resposta não for ok, lança um erro
-      if (!response.ok) {
-        throw new Error("Token inválido");
-      }
-
-      // se for ok, extrai os dados retornados em json e atualiza o estado de produtos
-      const data = await response.json();
+      const data = await buscarProdutosService();
+      // se sucesso, atualiza o estado de produtos com os dados recebidos do backend
       setProdutos(data);
-
-      // Extrai informações do usuário do primeiro produto (todas têm os mesmos dados)
     } catch (err) {
+      // em caso de erro, atualiza o estado de erro para exibir a mensagem de erro na tela
       setErro("Sessão expirada. Faça login novamente.");
     }
   }
 
   // função para deletar um produto pelo idProduto
   async function deleteProdutos(idProduto) {
-    // Validação se o idProduto foi fornecido e recebido corretamente (deletar quando não for mais necessário)
-    console.log("ID DO PRODUTO A SER DELETADO:", idProduto);
-    // envia a requisição (metodo post) de delete para o backend (http://localhost:3000/auth/delete) no formato json contendo no body o idProduto e espera uma resposta
-    const response = await fetch(`http://localhost:3000/auth/delete`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ idProduto }),
-    });
-    // valida o retorno da requisição (excluir quando não for mais necessário)
-    console.log("REQUISIÇÃO ENVIADA PARA DELETE:", response);
-
-    /* Recebe uma resposta do backend*/
-    const data = await response.json();
-    console.log("RESPOSTA DO DELETE:", data);
-    /* informa falha ou sucesso, caso seja um erro, impede quebra e exibe a mensagem de erro recebida */
-    if (!response.ok) {
-      throw new Error(data.erro);
-    } else {
-      // Recarrega os produtos após deletar
+    // chama a função deleteId passando o idProduto, se sucesso, chama a função buscarProdutos para atualizar a lista de produtos
+    try {
+      await deleteId(idProduto);
+      // após deletar, busca os produtos novamente para atualizar a lista
       buscarProdutos();
+    } catch (err) {
+      // em caso de erro, atualiza o estado de erro para exibir a mensagem de erro na tela
+      setErro("Erro ao deletar produto. Tente novamente.");
     }
   }
 
-  /* Quando a pagina carregar, busca as informações do user
-  busca pelo token e armazena o mesmo na cost token
-  se o token não for encontrado, retorna erro */
+  /* Quando a pagina carregar, busca as informações do user */
   useEffect(() => {
     async function buscarInfos() {
-      const token = localStorage.getItem("token");
-
-      if (!token) {
-        setErro("Usuário não autenticado");
-        return;
-      }
-
-      //envia o token para http://localhost:3000/auth/me e aguarda uma resposta
+      //chamada da função buscarInfoUsuario para obter as informações do usuário autenticado
       try {
-        const response = await fetch("http://localhost:3000/auth/me", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const data = await buscarInfoUsuario();
 
-        // se a resposta não for ok, lança um erro
-        if (!response.ok) {
-          throw new Error("Token inválido");
-        }
-
-        // se for ok, extrai os dados retornados em json e armazena na variavel data
-        const data = await response.json();
-
-        // Extrai informações do usuário do retorno e atualiza o estado
+        // Se sucesso, extrai informações do usuário do retorno e atualiza o estado
         if (data.length > 0) {
           setUsuarioInfo({
             nome: data[0].usuarionome,
