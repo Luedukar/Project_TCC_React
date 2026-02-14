@@ -24,6 +24,23 @@ function Produtos(props) {
           >
             <i className="bx bx-trash cursor-pointer bg-transparent text-red-600"></i>
           </button>
+
+          {/* Exibir estado do aviso (ativo ou inativo) e botão para alternar o estado */}
+          {item.enviaraviso ? (
+            <button
+              className="ml-3 cursor-pointer rounded-md bg-green-500 px-4 py-2 text-white"
+              onClick={() => props.desativarAviso(item.idproduto)}
+            >
+              Desativar Aviso
+            </button>
+          ) : (
+            <button
+              className="ml-3 cursor-pointer rounded-md bg-yellow-500 px-4 py-2 text-white"
+              onClick={() => props.ativarAviso(item.idproduto)}
+            >
+              Ativar Aviso
+            </button>
+          )}
         </li>
       ))}
       {/* Limite de 10 produtos por usuário* */}

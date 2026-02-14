@@ -3,6 +3,8 @@ import Produtos from "../components/Produtos";
 import { useNavigate } from "react-router-dom";
 import {
   deleteId,
+  desativarAviso as desativarAvisoService,
+  ativarAviso as ativarAvisoService,
   buscarProdutos as buscarProdutosService,
   buscarInfoUsuario,
 } from "../services/authService";
@@ -43,6 +45,32 @@ function Home() {
     } catch (err) {
       // em caso de erro, atualiza o estado de erro para exibir a mensagem de erro na tela
       setErro("Erro ao deletar produto. Tente novamente.");
+    }
+  }
+
+  // função para desativar o envio de aviso para um produto usando o idProduto
+  async function desativarAviso(idProduto) {
+    // chama a função desativarAvisoService passando o idProduto, se sucesso, chama a função buscarProdutos para atualizar a lista de produtos
+    try {
+      await desativarAvisoService(idProduto);
+      // após desativar aviso, busca os produtos novamente para atualizar a lista
+      buscarProdutos();
+    } catch (err) {
+      // em caso de erro, atualiza o estado de erro para exibir a mensagem de erro na tela
+      setErro("Erro ao desativar aviso. Tente novamente.");
+    }
+  }
+
+  // função para ativar o envio de aviso para um produto usando o idProduto
+  async function ativarAviso(idProduto) {
+    // chama a função ativarAvisoService passando o idProduto, se sucesso, chama a função buscarProdutos para atualizar a lista de produtos
+    try {
+      await ativarAvisoService(idProduto);
+      // após ativar aviso, busca os produtos novamente para atualizar a lista
+      buscarProdutos();
+    } catch (err) {
+      // em caso de erro, atualiza o estado de erro para exibir a mensagem de erro na tela
+      setErro("Erro ao ativar aviso. Tente novamente.");
     }
   }
 
@@ -97,13 +125,21 @@ function Home() {
             <box-icon name="left-arrow-alt"></box-icon>
             Logout
           </button>
-          <button className="ml-auto flex cursor-pointer items-center gap-2 rounded-md bg-white px-4 py-2 text-lg font-semibold text-black shadow">
+          <button
+            className="ml-auto flex cursor-pointer items-center gap-2 rounded-md bg-white px-4 py-2 text-lg font-semibold text-black shadow"
+            onClick={() => navigate("/create-produtos")}
+          >
             criar aviso
             <box-icon name="cart-add"></box-icon>
           </button>
         </div>
         <div className="mt-2">
-          <Produtos produtos={produtos} deleteProdutos={deleteProdutos} />
+          <Produtos
+            produtos={produtos}
+            deleteProdutos={deleteProdutos}
+            desativarAviso={desativarAviso}
+            ativarAviso={ativarAviso}
+          />
         </div>
       </div>
     </div>

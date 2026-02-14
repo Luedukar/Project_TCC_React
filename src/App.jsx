@@ -5,6 +5,7 @@ import Change from "./pages/Change";
 import Home from "./pages/Home";
 import PrivateRoute from "./components/PrivateRoute";
 import Layout from "./components/Layout";
+import CreateProdutos from "./pages/CreateProdutos";
 
 /* Os componentes a serem renderizados no App */
 function App() {
@@ -25,6 +26,11 @@ function App() {
         />
         {/* Segunda rota: Rota privada (tela após o login), só vai se passar pelo PrivateRoute */}
         <Route path="/home" element={<PrivateRoute children={<Home />} />} />
+        {/* Terceira rota: Rota privada para criação de produtos, só vai se passar pelo PrivateRoute */}
+        <Route
+          path="/create-produtos"
+          element={<PrivateRoute children={<CreateProdutos />} />}
+        />
       </Routes>
     </BrowserRouter>
   );

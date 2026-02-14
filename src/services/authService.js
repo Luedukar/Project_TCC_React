@@ -128,3 +128,72 @@ export async function buscarInfoUsuario() {
   const data = await response.json();
   return data;
 }
+
+export async function desativarAviso(idProduto) {
+  // faz uma requisição para o backend enviando o ID do produto a ser deletado
+  const response = await fetch(`${API_URL}/avisoOff`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ idProduto }),
+  });
+  // valida o retorno da requisição (excluir quando não for mais necessário)
+  console.log("REQUISIÇÃO ENVIADA PARA DESATIVAR AVISO:", response);
+
+  /* Recebe uma resposta do backend*/
+  const data = await response.json();
+  //retorna o resultado
+  return data;
+}
+
+export async function ativarAviso(idProduto) {
+  // faz uma requisição para o backend enviando o ID do produto a ser deletado
+  const response = await fetch(`${API_URL}/avisoOn`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ idProduto }),
+  });
+  // valida o retorno da requisição (excluir quando não for mais necessário)
+  console.log("REQUISIÇÃO ENVIADA PARA ATIVAR AVISO:", response);
+
+  /* Recebe uma resposta do backend*/
+  const data = await response.json();
+  //retorna o resultado
+  return data;
+}
+
+/* função recebendo formData (arrei com as informações para criar aviso de produto) */
+/* async permite o uso do await, o await seria algo como "esperar", pois ele aguardar uma resposta de algo, no caso, do POST feito para a API*/
+export async function criarAviso(formData) {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    throw new Error("Usuário não autenticado");
+  }
+  /* Envia uma solicitação para o endereço acima no formato json contendo email e senha, utilizando o método post (enviar dados)*/
+  const response = await fetch(`${API_URL}/createProdutos`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      nome: formData.nomeProduto,
+      preco: formData.precoProduto,
+      link: formData.linkProduto,
+    }),
+  });
+
+  /* Aguarda uma resposta do backend */
+  const data = await response.json();
+  console.log("RESPOSTA DO REGISTRO:", data);
+  /* informa falha ou sucesso, caso seja o erro, impede quebra e retorna o erro (ex: e-mail já cadastrado)*/
+  if (!response.ok) {
+    throw new Error(data.erro);
+  }
+
+  return data;
+}
