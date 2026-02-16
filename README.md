@@ -9,3 +9,5 @@ Atualmente o projeto conta com:
 Tecnologias utilizadas até o momento:
 
 - React (JavaScript, HTML) + Tailwind
+
+Repositirio dedicando ao frontend, contendo todas as páginas do projeto, estilos e API para comunicação com backend
