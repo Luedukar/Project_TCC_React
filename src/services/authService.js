@@ -47,7 +47,6 @@ export async function register(formData) {
 
   /* Aguarda uma resposta do backend */
   const data = await response.json();
-  console.log("RESPOSTA DO REGISTRO:", data);
   /* informa falha ou sucesso, caso seja o erro, impede quebra e retorna o erro (ex: e-mail já cadastrado)*/
   if (!response.ok) {
     throw new Error(data.erro);
@@ -66,9 +65,6 @@ export async function deleteId(idProduto) {
     },
     body: JSON.stringify({ idProduto }),
   });
-  // valida o retorno da requisição (excluir quando não for mais necessário)
-  console.log("REQUISIÇÃO ENVIADA PARA DELETE:", response);
-
   /* Recebe uma resposta do backend*/
   const data = await response.json();
   //retorna o resultado
@@ -138,9 +134,6 @@ export async function desativarAviso(idProduto) {
     },
     body: JSON.stringify({ idProduto }),
   });
-  // valida o retorno da requisição (excluir quando não for mais necessário)
-  console.log("REQUISIÇÃO ENVIADA PARA DESATIVAR AVISO:", response);
-
   /* Recebe uma resposta do backend*/
   const data = await response.json();
   //retorna o resultado
@@ -156,9 +149,6 @@ export async function ativarAviso(idProduto) {
     },
     body: JSON.stringify({ idProduto }),
   });
-  // valida o retorno da requisição (excluir quando não for mais necessário)
-  console.log("REQUISIÇÃO ENVIADA PARA ATIVAR AVISO:", response);
-
   /* Recebe uma resposta do backend*/
   const data = await response.json();
   //retorna o resultado
@@ -189,7 +179,6 @@ export async function criarAviso(formData) {
 
   /* Aguarda uma resposta do backend */
   const data = await response.json();
-  console.log("RESPOSTA DO REGISTRO:", data);
   /* informa falha ou sucesso, caso seja o erro, impede quebra e retorna o erro (ex: e-mail já cadastrado)*/
   if (!response.ok) {
     throw new Error(data.erro);

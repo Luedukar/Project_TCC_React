@@ -1,56 +1,90 @@
 function Produtos(props) {
-  // recebe 2 props: produtos (array de produtos) e deleteProdutos (função para deletar produto)
-  // validação, excluir quando não for mais necessária
-  console.log(props.produtos);
-  // se não houver produtos, exibe mensagem
-  if (!props.produtos || props.produtos.length === 0) {
-    return <p>Nenhum produto encontrado.</p>;
-  }
-  return (
-    <ul className="space-y-4 rounded-md bg-blue-600 shadow">
-      {/*props.produtos para acesso o array recebido, map para percorer item por item (item) semelhante ao for i in ### do python */}
-      {props.produtos.map((item) => (
-        // todo item precisa de uma key unica, nesse caso, o id do produto presente em cada item do array
-        <li key={item.idproduto} className="p-2">
-          <button className="rounded-md bg-white px-4 py-2 text-black">
-            {/* exibindo o nome do produto e o preço desejado usando chaves (chave-valor) do array*/}
-            {item.produtonome} - R$ {item.precodesejado}
-          </button>
-          <button
-            className="ml-3 rounded-md bg-white px-4 py-2 text-black"
-            //Executa a função deleteProdutos passada via props, passando o id do produto atual (item.idproduto) para excluir somente esse produto
-            //Como um user só tem acesso aos seus produtos, não há risco de excluir produto de outro user
-            onClick={() => props.deleteProdutos(item.idproduto)}
-          >
-            <i className="bx bx-trash cursor-pointer bg-transparent text-red-600"></i>
-          </button>
+  // props: produtos, deleteProdutos, desativarAviso, ativarAviso
+  const produtos = props.produtos || [];
 
-          {/* Exibir estado do aviso (ativo ou inativo) e botão para alternar o estado */}
-          {item.enviaraviso ? (
-            <button
-              className="ml-3 cursor-pointer rounded-md bg-green-500 px-4 py-2 text-white"
-              onClick={() => props.desativarAviso(item.idproduto)}
-            >
-              Desativar Aviso
-            </button>
-          ) : (
-            <button
-              className="ml-3 cursor-pointer rounded-md bg-yellow-500 px-4 py-2 text-white"
-              onClick={() => props.ativarAviso(item.idproduto)}
-            >
-              Ativar Aviso
-            </button>
-          )}
-        </li>
-      ))}
-      {/* Limite de 10 produtos por usuário* */}
-      {props.produtos.length === 10 && (
-        <p className="mt-4 text-center text-white">
+  if (produtos.length === 0) {
+    return (
+      <p className="rounded-lg bg-white p-6 text-center text-gray-600 shadow-sm">
+        Nenhum produto encontrado.
+      </p>
+    );
+  }
+
+  return (
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {produtos.map((item) => {
+        const preco = Number(item.precodesejado);
+        const precoFormatado = Number.isFinite(preco)
+          ? preco.toFixed(2).replace(".", ",")
+          : item.precodesejado;
+
+        return (
+          <section
+            key={item.idproduto}
+            className="flex flex-col justify-between rounded-lg border border-blue-100 bg-white p-4 shadow-sm"
+          >
+            <div>
+              <div className="flex items-start justify-between gap-3">
+                <h3 className="text-lg font-semibold text-gray-900">
+                  {item.produtonome}
+                </h3>
+                <span
+                  className={`rounded-full px-3 py-1 text-sm font-medium whitespace-nowrap ${
+                    item.enviaraviso
+                      ? "bg-green-100 text-green-800"
+                      : "bg-yellow-100 text-yellow-800"
+                  }`}
+                >
+                  {item.enviaraviso ? "Aviso ativo" : "Aviso inativo"}
+                </span>
+              </div>
+
+              <div className="mt-4 flex items-center gap-3">
+                <p className="text-sm text-gray-500">Preço desejado</p>
+                <p className="ml-auto text-xl font-bold text-blue-600">
+                  R$ {precoFormatado}
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-4 flex items-center gap-3">
+              <button
+                onClick={() => props.deleteProdutos(item.idproduto)}
+                className="inline-flex items-center gap-2 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm font-medium text-red-700 transition hover:bg-red-100"
+              >
+                <box-icon name="trash" size="sm"></box-icon>
+                Excluir
+              </button>
+
+              {item.enviaraviso ? (
+                <button
+                  onClick={() => props.desativarAviso(item.idproduto)}
+                  className="inline-flex items-center gap-2 rounded-md bg-green-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-green-700"
+                >
+                  <box-icon name="bell" color="#fff" size="sm"></box-icon>
+                  Desativar
+                </button>
+              ) : (
+                <button
+                  onClick={() => props.ativarAviso(item.idproduto)}
+                  className="inline-flex items-center gap-2 rounded-md bg-yellow-500 px-3 py-2 text-sm font-medium text-white transition hover:bg-yellow-600"
+                >
+                  <box-icon name="bell" color="#fff" size="sm"></box-icon>
+                  Ativar
+                </button>
+              )}
+            </div>
+          </section>
+        );
+      })}
+
+      {produtos.length === 10 && (
+        <p className="col-span-full mt-2 rounded-lg bg-white p-4 text-center text-gray-600 shadow-sm">
           Você atingiu o limite máximo de produtos. Exclua alguns para adicionar
-          mais.
+          novos.
         </p>
       )}
-    </ul>
+    </div>
   );
 }
 
