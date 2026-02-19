@@ -15,7 +15,6 @@ export async function login(email, senha) {
 
   /* Recebe uma resposta do backend*/
   const data = await response.json();
-  console.log("RESPOSTA DO LOGIN:", data);
   localStorage.setItem("token", data.token);
   /* informa falha ou sucesso, caso seja o erro, impede quebra e retorna o erro (ex: senha incorreta)*/
   if (!response.ok) {

@@ -125,14 +125,14 @@ function Home() {
             <div className="flex flex-col gap-3 pt-6 sm:flex-row sm:pt-0 sm:pl-2 md:flex-row md:justify-center md:pt-0">
               <button
                 onClick={() => navigate("/create-produtos")}
-                className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-blue-600 to-blue-500 px-6 py-2.5 font-semibold text-white shadow-md transition-all hover:from-blue-700 hover:to-blue-600 hover:shadow-lg active:scale-95"
+                className="inline-flex cursor-pointer items-center gap-2 rounded-lg bg-gradient-to-r from-blue-600 to-blue-500 px-6 py-2.5 font-semibold text-white shadow-md transition-all hover:from-blue-700 hover:to-blue-600 hover:shadow-lg active:scale-95"
               >
                 <box-icon name="cart-add" size="sm"></box-icon>
                 Criar Aviso
               </button>
               <button
                 onClick={handleLogout}
-                className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 font-medium text-gray-700 transition-all hover:border-gray-400 hover:bg-gray-50 active:scale-95"
+                className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 font-medium text-gray-700 transition-all hover:border-gray-400 hover:bg-gray-50 active:scale-95"
               >
                 <box-icon name="left-arrow-alt" size="sm"></box-icon>
                 Sair

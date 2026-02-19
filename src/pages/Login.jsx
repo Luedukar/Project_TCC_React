@@ -29,7 +29,6 @@ export default function Login() {
         email: "",
         senha: "",
       });
-      console.log("TOKEN SALVO:", localStorage.getItem("token"));
       navigate("/home");
       /* Caso erro, exibe a mensagem de erro */
     } catch (err) {
