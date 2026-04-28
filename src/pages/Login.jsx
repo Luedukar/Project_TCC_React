@@ -19,7 +19,7 @@ export default function Login() {
     e.preventDefault();
     setErro("");
 
-    // envia as informações de email e senha para a função login
+    // Envia as informações de email e senha para a função login
     try {
       await login(formData.email, formData.senha);
       // Caso sucesso, exibe mensagem e limpa os campos

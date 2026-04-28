@@ -3,6 +3,7 @@ const API_URL = "http://localhost:3000/auth";
 
 // Função recebendo email e senha
 export async function login(email, senha) {
+  // Envia uma solicitação para o endereço abaixo no formato json contendo email e senha, utilizando o método post (enviar dados)
   const response = await fetch(`${API_URL}/login`, {
     method: "POST",
     headers: {
@@ -11,8 +12,10 @@ export async function login(email, senha) {
     body: JSON.stringify({ email, senha }),
   });
 
+  // Aguarda uma resposta do backend
   const data = await response.json();
 
+  // Se a resposta for !ok exibe o erro
   if (!response.ok) {
     throw new Error(data.erro);
   }
@@ -20,9 +23,9 @@ export async function login(email, senha) {
   return data;
 }
 
-// função recebendo formData (arrei com as informações para criar login)
+// Função recebendo formData (arrei com as informações para criar login)
 export async function register(formData) {
-  // Envia uma solicitação para o endereço acima no formato json contendo email e senha, utilizando o método post (enviar dados)
+  // Envia uma solicitação para o endereço abaixo no formato json contendo chave-valor para as informações necessárias para criar um cadastro
   const response = await fetch(`${API_URL}/register`, {
     method: "POST",
     headers: {
@@ -49,7 +52,7 @@ export async function register(formData) {
   return data;
 }
 
-// Função responsavel por deleter produtos (recebe o id do produto a ser deletado)
+// Função responsável por deleter produtos (recebe o id do produto a ser deletado)
 export async function deleteId(idProduto) {
   const response = await fetch(`${API_URL}/delete`, {
     method: "POST",
@@ -71,9 +74,8 @@ export async function buscarProdutos() {
     headers: {
       "Content-Type": "application/json",
     },
-    credentials: "include", // 🔥 ESSENCIAL (envia cookies)
+    credentials: "include", // Envia cookies pois somente um user pode ver seus produtos
   });
-  console.log("enviando informações products");
 
   // Se a reposta for erro
   if (!response.ok) {
@@ -85,16 +87,15 @@ export async function buscarProdutos() {
   return data;
 }
 
-// Função responsavel por buscar as informações do user
+// Função responsável por buscar as informações do user
 export async function buscarInfoUsuario() {
   const response = await fetch(`${API_URL}/me`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
     },
-    credentials: "include", // 🔥 ESSENCIAL (envia cookies)
+    credentials: "include", // Envia cookies pois somente um user pode ver suas informações
   });
-  console.log("enviando informações ME");
 
   if (!response.ok) {
     throw new Error("Token inválido");
@@ -146,8 +147,8 @@ export async function criarAviso(formData) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
     },
+    credentials: "include", // Envia cookies pois o propduto é criado para um user
     body: JSON.stringify({
       nome: formData.nomeProduto,
       preco: formData.precoProduto,
@@ -164,27 +165,22 @@ export async function criarAviso(formData) {
   return data;
 }
 
-// Função recebendo codigoInserido e utilizado token"codigo" para validar duplo fator
+// Função recebendo codigoInserido para validar duplo fator
 export async function validarDuploFator(codigoInserido) {
   const response = await fetch(`${API_URL}/autenticarDuploFator`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    credentials: "include", // 🔥 ESSENCIAL (envia cookies)
-    body: JSON.stringify({ codigoInserido }), // 🔥 não envia mais id_2fa
+    credentials: "include", // Envia Cookies contendo o ID do 2fa que será usado
+    body: JSON.stringify({ codigoInserido }), // código a ser comparado
   });
-
-  console.log("Duplo fator enviado com sucesso");
 
   const data = await response.json();
 
   if (!response.ok) {
     throw new Error(data.erro);
   }
-
-  // ❌ não salva mais token no localStorage
-  console.log("Autenticação 2FA concluída");
 
   return data;
 }

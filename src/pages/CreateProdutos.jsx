@@ -19,7 +19,7 @@ export default function CreateProdutos() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    // valida e converte preco para float antes de enviar
+    // Valida e converte preco para float antes de enviar
     const precoRaw = String(formData.precoProduto || "")
       .replace(",", ".")
       .trim();

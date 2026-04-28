@@ -16,14 +16,13 @@ export default function DuploFator() {
     e.preventDefault();
     setErro("");
 
-    // envia as informações de email e senha para a função login
+    // Envia o código inserido para a função validarDuploFator e aguarda a resposta
     try {
       await validarDuploFator(codigo.codigo);
-      // Caso sucesso, exibe mensagem e limpa os campos
+      // Caso sucesso, limpa os campos e direciona para a página Home
       setCodigo({
         codigo: "",
       });
-      console.log("Código validado com sucesso");
       navigate("/Home");
       // Caso erro, exibe a mensagem de erro
     } catch (err) {

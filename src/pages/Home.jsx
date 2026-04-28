@@ -10,66 +10,65 @@ import {
 } from "../services/authService";
 
 function Home() {
-  // estado para armazenar os produtos e informações do usuário (e erro caso necessario)
+  // Estado para armazenar os produtos e informações do usuário (e erro caso necessario)
   const [produtos, setProdutos] = useState([]);
   const [usuarioInfo, setUsuarioInfo] = useState(null);
   const [erro, setErro] = useState("");
 
-  //logout function (excluir o token e redirecionar para a tela de login, por isso o useNavigate) mas só quando o botão for clicado
+  // logout function (Atualizar para remover token dos Cookies e redirecionar para login)
   const navigate = useNavigate();
   function handleLogout() {
-    localStorage.removeItem("token");
     navigate("/");
   }
 
-  //função para buscar os produtos do usuário autenticado
+  // Função para buscar os produtos do usuário autenticado
   async function buscarProdutos() {
-    //chama a função buscarprodutosService
+    // Chama a função buscarprodutosService
     try {
       const data = await buscarProdutosService();
-      // se sucesso, atualiza o estado de produtos com os dados recebidos do backend
+      // Se sucesso, atualiza o estado de produtos com os dados recebidos do backend
       setProdutos(data);
     } catch (err) {
-      // em caso de erro, atualiza o estado de erro para exibir a mensagem de erro na tela
+      // Em caso de erro, atualiza o estado de erro para exibir a mensagem de erro na tela
       setErro("Sessão expirada. Faça login novamente.");
     }
   }
 
-  // função para deletar um produto pelo idProduto
+  // Função para deletar um produto pelo idProduto
   async function deleteProdutos(idProduto) {
-    // chama a função deleteId passando o idProduto, se sucesso, chama a função buscarProdutos para atualizar a lista de produtos
+    // Chama a função deleteId passando o idProduto, se sucesso, chama a função buscarProdutos para atualizar a lista de produtos
     try {
       await deleteId(idProduto);
-      // após deletar, busca os produtos novamente para atualizar a lista
+      // Após deletar, busca os produtos novamente para atualizar a lista
       buscarProdutos();
     } catch (err) {
-      // em caso de erro, atualiza o estado de erro para exibir a mensagem de erro na tela
+      // Em caso de erro, atualiza o estado de erro para exibir a mensagem de erro na tela
       setErro("Erro ao deletar produto. Tente novamente.");
     }
   }
 
-  // função para desativar o envio de aviso para um produto usando o idProduto
+  // Função para desativar o envio de aviso para um produto usando o idProduto
   async function desativarAviso(idProduto) {
-    // chama a função desativarAvisoService passando o idProduto, se sucesso, chama a função buscarProdutos para atualizar a lista de produtos
+    // Chama a função desativarAvisoService passando o idProduto, se sucesso, chama a função buscarProdutos para atualizar a lista de produtos
     try {
       await desativarAvisoService(idProduto);
-      // após desativar aviso, busca os produtos novamente para atualizar a lista
+      // Após desativar aviso, busca os produtos novamente para atualizar a lista
       buscarProdutos();
     } catch (err) {
-      // em caso de erro, atualiza o estado de erro para exibir a mensagem de erro na tela
+      // Em caso de erro, atualiza o estado de erro para exibir a mensagem de erro na tela
       setErro("Erro ao desativar aviso. Tente novamente.");
     }
   }
 
-  // função para ativar o envio de aviso para um produto usando o idProduto
+  // Função para ativar o envio de aviso para um produto usando o idProduto
   async function ativarAviso(idProduto) {
-    // chama a função ativarAvisoService passando o idProduto, se sucesso, chama a função buscarProdutos para atualizar a lista de produtos
+    // Chama a função ativarAvisoService passando o idProduto, se sucesso, chama a função buscarProdutos para atualizar a lista de produtos
     try {
       await ativarAvisoService(idProduto);
-      // após ativar aviso, busca os produtos novamente para atualizar a lista
+      // Após ativar aviso, busca os produtos novamente para atualizar a lista
       buscarProdutos();
     } catch (err) {
-      // em caso de erro, atualiza o estado de erro para exibir a mensagem de erro na tela
+      // Em caso de erro, atualiza o estado de erro para exibir a mensagem de erro na tela
       setErro("Erro ao ativar aviso. Tente novamente.");
     }
   }
@@ -90,7 +89,7 @@ function Home() {
           });
         }
       } catch (err) {
-        // em caso de erro, atualiza o estado de erro
+        // Em caso de erro, atualiza o estado de erro
         setErro("Sessão expirada. Faça login novamente.");
       }
     }
@@ -100,12 +99,12 @@ function Home() {
     buscarProdutos();
   }, []);
 
-  // se houver um erro geral na pagina, não relacionado ao banco, exibe a mensagem de erro
+  // Se houver um erro geral na pagina, não relacionado ao banco, exibe a mensagem de erro
   if (erro) {
     return <p className="text-red-500">{erro}</p>;
   }
 
-  // enquanto as informações do usuário não forem carregadas, exibe "Carregando..."
+  // Enquanto as informações do usuário não forem carregadas, exibe "Carregando..."
   if (!usuarioInfo) {
     return <p>Carregando...</p>;
   }
