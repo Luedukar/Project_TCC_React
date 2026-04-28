@@ -8,7 +8,6 @@ export async function login(email, senha) {
     headers: {
       "Content-Type": "application/json",
     },
-    credentials: "include", // 🔥 ESSENCIAL
     body: JSON.stringify({ email, senha }),
   });
 
