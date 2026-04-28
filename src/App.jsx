@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import PrivateRoute from "./components/PrivateRoute";
 import Layout from "./components/Layout";
 import CreateProdutos from "./pages/CreateProdutos";
+import DuploFator from "./pages/DuploFator";
 
 /* Os componentes a serem renderizados no App */
 function App() {
@@ -24,6 +25,7 @@ function App() {
             </Layout>
           }
         />
+        <Route path="/duplo-fator" element={<DuploFator />} />
         {/* Segunda rota: Rota privada (tela após o login), só vai se passar pelo PrivateRoute */}
         <Route path="/home" element={<PrivateRoute children={<Home />} />} />
         {/* Terceira rota: Rota privada para criação de produtos, só vai se passar pelo PrivateRoute */}

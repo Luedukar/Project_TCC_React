@@ -8,7 +8,7 @@ export default function Cadastro() {
   const [mensagem, setMensagem] = useState("");
   const [tipoMensagem, setTipoMensagem] = useState("");
 
-  /* array de dados do formulário */
+  // array de dados do formulário
   const [formData, setFormData] = useState({
     nome: "",
     sobrenome: "",
@@ -19,22 +19,22 @@ export default function Cadastro() {
     dataNascimento: "",
   });
 
-  /* Faz o envio do formulario quando eu usar o type submit */
+  // Faz o envio do formulario quando eu usar o type submit
   async function handleSubmit(e) {
-    /* Impede do formulario recarregar */
+    // Impede do formulario recarregar
     e.preventDefault();
 
-    /* Verifica se as senhas coincidem, se não, exibe alerta */
+    // Verifica se as senhas coincidem, se não, exibe alerta
     if (formData.senha !== formData.confirmarSenha) {
       setMensagem("As senhas não coincidem!");
       setTipoMensagem("erro");
       return;
     }
 
-    /* Envia as informações do formData para a função register */
+    // Envia as informações do formData para a função register
     try {
       await register(formData);
-      /* Se a respotas for um status de sucesso (ok) grava no setmensagem e setTipoMensagem e zera os campos de cadastro*/
+      // Se a respotas for um status de sucesso (ok) grava no setmensagem e setTipoMensagem e zera os campos de cadastro
       setMensagem("Usuário criado com sucesso!");
       setTipoMensagem("sucesso");
 
@@ -47,7 +47,7 @@ export default function Cadastro() {
         celular: "",
         dataNascimento: "",
       });
-      /* Se não (se for uma mensagem de erro (!ok)) grava no setmensagem e setTipoMensagem */
+      // Se não (se for uma mensagem de erro (!ok)) grava no setmensagem e setTipoMensagem
     } catch (error) {
       setMensagem(error.message);
       setTipoMensagem("erro");
@@ -57,7 +57,6 @@ export default function Cadastro() {
   return (
     <div className="form_cadastro absolute right-[-100%] z-1 flex h-full items-center p-[40px] text-center text-black transition-all duration-[1200ms] ease-in-out sm:bottom-[0] sm:w-[50%]">
       <form className="w-full" onSubmit={handleSubmit}>
-        {/* Define que esse é o formulario a ser enviado */}
         <h1 className="m-[-10px] pb-[5px] text-2xl sm:pb-0">
           Crie seu cadastro
         </h1>
@@ -123,13 +122,12 @@ export default function Cadastro() {
         <button
           className="mt-[20px] h-[48px] w-full cursor-pointer rounded-lg bg-blue-400 text-base font-semibold text-white shadow-[0_0_10px_rgba(0,0,0,0.1)]"
           type="submit"
-          /* O type submit para envio do formulario */
         >
           Criar cadastro
         </button>
 
         {/* Exibe a mensagem de sucesso ou erro, se não houver mensagem, não exibe nada*/}
-        {/* Se sucesso (definido lá em cima), exibe mensagem verde; se erro, exibe mensagem vermelha */}
+        {/* Se sucesso (definido no topo), exibe mensagem verde; se erro, exibe mensagem vermelha */}
         {mensagem && (
           <div
             className={`mt-[5px] p-[5px] ${

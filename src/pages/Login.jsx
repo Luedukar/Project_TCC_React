@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { data, useNavigate } from "react-router-dom";
 import { login } from "../services/authService";
 import SocialIcon from "../components/SocialIcon";
 import Form from "../components/Form";
 
-/* Armazena os valores dos campos de email e senha, também possivel "valores de erro" */
-/* export (exporta uma função, variavel, etc.), export default (exporta um componente)*/
+// Armazena os valores dos campos de email e senha, também possivel "valores de erro"
 export default function Login() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -14,23 +13,23 @@ export default function Login() {
   });
   const [erro, setErro] = useState("");
 
-  /* Faz o envio do formulario quando eu usar o type submit */
+  // Faz o envio do formulario quando eu usar o type submit
   async function handleSubmit(e) {
-    /* Impede do formulario recarregar e zera a mensagem de erro */
+    // Impede do formulario recarregar e zera a mensagem de erro
     e.preventDefault();
     setErro("");
 
-    /* envia as informações de email e senha para a função login */
+    // envia as informações de email e senha para a função login
     try {
       await login(formData.email, formData.senha);
-      /* Caso sucesso, exibe mensagem e limpa os campos */
-      // alert("Login realizado com sucesso!");
+      // Caso sucesso, exibe mensagem e limpa os campos
       setFormData({
         email: "",
         senha: "",
       });
-      navigate("/home");
-      /* Caso erro, exibe a mensagem de erro */
+      console.log("Login bem-sucedido");
+      navigate("/duplo-fator");
+      // Caso erro, exibe a mensagem de erro
     } catch (err) {
       setErro(err.message);
     }
@@ -39,7 +38,6 @@ export default function Login() {
   return (
     <div className="form_login absolute right-[0] bottom-[0] z-1 flex h-[70%] w-full items-center p-[40px] text-center text-black transition-all duration-[900ms] ease-in-out sm:h-full sm:w-[50%] sm:bg-white">
       <form className="w-full" onSubmit={handleSubmit}>
-        {" "}
         {/* Define que esse é o formulario a ser enviado */}
         <h1 className="m-[-10px] pb-[20px] text-4xl">Login</h1>
         <Form
