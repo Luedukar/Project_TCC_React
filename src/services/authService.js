@@ -3,20 +3,17 @@ const API_URL = "http://localhost:3000/auth";
 
 // Função recebendo email e senha
 export async function login(email, senha) {
-  //Envia uma solicitação para o endereço acima no formato json contendo email e senha, utilizando o método post (enviar dados)
   const response = await fetch(`${API_URL}/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
+    credentials: "include", // 🔥 ESSENCIAL
     body: JSON.stringify({ email, senha }),
   });
 
-  // Recebe uma resposta do backend
   const data = await response.json();
 
-  localStorage.setItem("codigo", data.codigo);
-  // informa falha ou sucesso, caso seja o erro, impede quebra e retorna o erro (ex: senha incorreta)
   if (!response.ok) {
     throw new Error(data.erro);
   }
@@ -70,20 +67,14 @@ export async function deleteId(idProduto) {
 
 // Função responsavel por buscar os produtos de um determinado usuario
 export async function buscarProdutos() {
-  // pega o Token armazenado no localStorage
-  const token = localStorage.getItem("token");
-
-  // caso não tenha Token
-  if (!token) {
-    throw new Error("Usuário não autenticado");
-  }
-
-  // Faz uma requisição para o backend passando o Token
   const response = await fetch(`${API_URL}/productsMe`, {
+    method: "GET",
     headers: {
-      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
     },
+    credentials: "include", // 🔥 ESSENCIAL (envia cookies)
   });
+  console.log("enviando informações products");
 
   // Se a reposta for erro
   if (!response.ok) {
@@ -97,17 +88,14 @@ export async function buscarProdutos() {
 
 // Função responsavel por buscar as informações do user
 export async function buscarInfoUsuario() {
-  const token = localStorage.getItem("token");
-
-  if (!token) {
-    throw new Error("Usuário não autenticado");
-  }
-
   const response = await fetch(`${API_URL}/me`, {
+    method: "GET",
     headers: {
-      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
     },
+    credentials: "include", // 🔥 ESSENCIAL (envia cookies)
   });
+  console.log("enviando informações ME");
 
   if (!response.ok) {
     throw new Error("Token inválido");
@@ -179,15 +167,15 @@ export async function criarAviso(formData) {
 
 // Função recebendo codigoInserido e utilizado token"codigo" para validar duplo fator
 export async function validarDuploFator(codigoInserido) {
-  const id_2fa = localStorage.getItem("codigo");
-
   const response = await fetch(`${API_URL}/autenticarDuploFator`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ id_2fa, codigoInserido }),
+    credentials: "include", // 🔥 ESSENCIAL (envia cookies)
+    body: JSON.stringify({ codigoInserido }), // 🔥 não envia mais id_2fa
   });
+
   console.log("Duplo fator enviado com sucesso");
 
   const data = await response.json();
@@ -196,8 +184,8 @@ export async function validarDuploFator(codigoInserido) {
     throw new Error(data.erro);
   }
 
-  localStorage.setItem("token", data.token);
-  console.log("Token recebido e salvo com sucesso");
+  // ❌ não salva mais token no localStorage
+  console.log("Autenticação 2FA concluída");
 
   return data;
 }

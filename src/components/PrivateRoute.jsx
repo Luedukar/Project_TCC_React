@@ -1,10 +1,32 @@
 import { Navigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
-/* Segurança, impede que seja feito login sem um token, se não tiver token, volta para a tela de login (o que permite layout também)*/
 function PrivateRoute({ children }) {
-  const token = localStorage.getItem("token");
+  const [autenticado, setAutenticado] = useState(null);
 
-  if (!token) {
+  useEffect(() => {
+    fetch("http://localhost:3000/auth/protect", {
+      credentials: "include", // envia cookie ao backend para verificar autenticação
+    })
+      // Se a respota (res) for ok, libera o acesso, caso contrário, bloqueia o acesso e redireciona para a tela de login
+      .then((res) => {
+        if (res.ok) {
+          setAutenticado(true);
+        } else {
+          setAutenticado(false);
+        }
+      })
+      // Em caso de erro na requisição, bloqueia o acesso e redireciona para a tela de login
+      .catch(() => setAutenticado(false));
+  }, []);
+
+  // enquanto verifica
+  if (autenticado === null) {
+    return <p>Carregando...</p>;
+  }
+
+  // se não autenticado, redireciona para a tela de login
+  if (!autenticado) {
     return <Navigate to="/" replace />;
   }
 
