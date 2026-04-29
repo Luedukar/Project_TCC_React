@@ -7,6 +7,7 @@ import {
   ativarAviso as ativarAvisoService,
   buscarProdutos as buscarProdutosService,
   buscarInfoUsuario,
+  logout as logoutService,
 } from "../services/authService";
 
 function Home() {
@@ -18,6 +19,7 @@ function Home() {
   // logout function (Atualizar para remover token dos Cookies e redirecionar para login)
   const navigate = useNavigate();
   function handleLogout() {
+    logoutService();
     navigate("/");
   }
 

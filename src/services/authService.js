@@ -9,6 +9,7 @@ export async function login(email, senha) {
     headers: {
       "Content-Type": "application/json",
     },
+    credentials: "include",
     body: JSON.stringify({ email, senha }),
   });
 
@@ -137,12 +138,6 @@ export async function ativarAviso(idProduto) {
 
 // Função recebendo formData (arrei com as informações para criar aviso de produto) para criação de aviso
 export async function criarAviso(formData) {
-  const token = localStorage.getItem("token");
-
-  if (!token) {
-    throw new Error("Usuário não autenticado");
-  }
-
   const response = await fetch(`${API_URL}/createProdutos`, {
     method: "POST",
     headers: {
@@ -174,6 +169,25 @@ export async function validarDuploFator(codigoInserido) {
     },
     credentials: "include", // Envia Cookies contendo o ID do 2fa que será usado
     body: JSON.stringify({ codigoInserido }), // código a ser comparado
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.erro);
+  }
+
+  return data;
+}
+
+// Função para realizar logout (excluir Cookie de login)
+export async function logout() {
+  const response = await fetch(`${API_URL}/logout`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include", // Envia Cookies contendo o ID do 2fa que será usado
   });
 
   const data = await response.json();
