@@ -31,26 +31,33 @@ export default function DuploFator() {
   }
 
   return (
-    <div>
-      <h1>Duplo Fator</h1>
-      <p>Em breve, esta página estará disponível.</p>
-      <form className="w-full" onSubmit={handleSubmit}>
-        <Form
-          type="text"
-          placeholder="Código"
-          value={codigo.codigo}
-          set={setCodigo}
-          fieldName="codigo"
-          icon="bx-lock"
-        />
-        <button
-          className="h-[48px] w-full cursor-pointer rounded-lg bg-blue-400 text-base font-semibold text-white shadow-[0_0_10px_rgba(0,0,0,0.1)]"
-          type="submit"
-        >
-          Enviar Código
-        </button>
-      </form>
-      {erro && <p style={{ color: "red" }}>{erro}</p>}
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 via-white to-blue-50 px-4">
+      <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-lg">
+        <h1 className="mb-6 bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-center text-3xl font-bold text-transparent">
+          Duplo Fator de segurança
+        </h1>
+        <p className="mb-6 text-center text-gray-600">
+          Insira o código de autenticação enviado para o seu email para acessar
+          sua conta.
+        </p>
+        <form className="w-full" onSubmit={handleSubmit}>
+          <Form
+            type="text"
+            placeholder="Código"
+            value={codigo.codigo}
+            set={setCodigo}
+            fieldName="codigo"
+            icon="bx-lock"
+          />
+          <button
+            className="mt-4 h-[48px] w-full cursor-pointer rounded-lg bg-blue-400 text-base font-semibold text-white shadow-[0_0_10px_rgba(0,0,0,0.1)] transition-all hover:bg-blue-500"
+            type="submit"
+          >
+            Enviar Código
+          </button>
+        </form>
+        {erro && <p className="mt-4 text-center text-red-500">{erro}</p>}
+      </div>
     </div>
   );
 }
