@@ -57,8 +57,11 @@ export default function Login() {
           icon="bx-lock"
         />
         <div className="pt-[15px] pb-[20px]">
-          <a className="m-[30px] p-[20px] text-sm text-black" href="#">
-            Forgot password?
+          <a
+            className="m-[5px] p-[20px] text-base text-blue-400 transition-colors duration-200 hover:text-blue-600 hover:underline"
+            href="#"
+          >
+            Esqueceu sua senha?
           </a>
         </div>
         <button
@@ -68,7 +71,7 @@ export default function Login() {
         >
           Login
         </button>
-        <p className="m-[15px] text-base">Visit my social platforms</p>
+        <p className="m-[15px] text-base">Visite minhas redes sociais</p>
         <div className="flex justify-center">
           <SocialIcon href="#" name="linkedin-square" />
           <SocialIcon href="#" name="github" />
