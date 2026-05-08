@@ -27,7 +27,6 @@ export default function Login() {
         email: "",
         senha: "",
       });
-      console.log("Login bem-sucedido");
       navigate("/duplo-fator");
       // Caso erro, exibe a mensagem de erro
     } catch (err) {

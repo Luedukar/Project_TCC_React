@@ -60,6 +60,7 @@ export async function deleteId(idProduto) {
     headers: {
       "Content-Type": "application/json",
     },
+    credentials: "include",
     body: JSON.stringify({ idProduto }),
   });
 
@@ -113,6 +114,7 @@ export async function desativarAviso(idProduto) {
     headers: {
       "Content-Type": "application/json",
     },
+    credentials: "include",
     body: JSON.stringify({ idProduto }),
   });
 
@@ -128,6 +130,7 @@ export async function ativarAviso(idProduto) {
     headers: {
       "Content-Type": "application/json",
     },
+    credentials: "include",
     body: JSON.stringify({ idProduto }),
   });
 
