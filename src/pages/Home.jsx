@@ -8,6 +8,7 @@ import {
   buscarProdutos as buscarProdutosService,
   buscarInfoUsuario,
   logout as logoutService,
+  deletarUser,
 } from "../services/authService";
 import Swal from "sweetalert2";
 
@@ -37,6 +38,7 @@ function Home() {
     }).then((result) => {
       if (result.isConfirmed) {
         // Chama a função para exclusão do usuário e depois faz logout
+        deletarUser();
       }
     });
   }

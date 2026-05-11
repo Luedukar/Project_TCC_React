@@ -201,3 +201,18 @@ export async function logout() {
 
   return data;
 }
+
+// Função para deletar usuario, não precisa de paramétros pois tudo está no token salvo nos cookies
+export async function deletarUser() {
+  const response = await fetch(`${API_URL}/deleteUser`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+  });
+
+  const data = await response.json();
+
+  return data;
+}
