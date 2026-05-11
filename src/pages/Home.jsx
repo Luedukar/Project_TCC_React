@@ -9,6 +9,7 @@ import {
   buscarInfoUsuario,
   logout as logoutService,
 } from "../services/authService";
+import Swal from "sweetalert2";
 
 function Home() {
   // Estado para armazenar os produtos e informações do usuário (e erro caso necessario)
@@ -16,11 +17,28 @@ function Home() {
   const [usuarioInfo, setUsuarioInfo] = useState(null);
   const [erro, setErro] = useState("");
 
-  // logout function (Atualizar para remover token dos Cookies e redirecionar para login)
+  // Logout function (Atualizar para remover token dos Cookies e redirecionar para login)
   const navigate = useNavigate();
   function handleLogout() {
     logoutService();
     navigate("/");
+  }
+
+  // Função para exibir aviso de exclusão de conta usando SweetAlert2, caso confirme, chama a função de exclusão do usuário e depois faz logout, do contraio somente cancela a ação
+  function handleExcluide() {
+    Swal.fire({
+      title: "Tem certeza que deseja excluir sua conta?",
+      text: "Essa ação é irreversível e todos os seus dados serão perdidos.",
+      icon: "warning",
+      showConfirmButton: true,
+      showCancelButton: true,
+      confirmButtonText: "Sim, excluir minha conta",
+      cancelButtonText: "Não, manter minha conta",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Chama a função para exclusão do usuário e depois faz logout
+      }
+    });
   }
 
   // Função para buscar os produtos do usuário autenticado
@@ -119,9 +137,11 @@ function Home() {
           <div className="flex flex-col items-center justify-between sm:flex-row md:flex-row">
             <div>
               <h1 className="bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-3xl font-bold text-transparent">
-                Bem-vindo, {usuarioInfo.nome}
+                Bem-vindo, {usuarioInfo.nome}{" "}
               </h1>
-              <p className="mt-1 text-sm text-gray-500">{usuarioInfo.email}</p>
+              <p className="mt-1 text-sm text-gray-500">
+                {usuarioInfo.email}{" "}
+              </p>{" "}
             </div>
             <div className="flex flex-col gap-3 pt-6 sm:flex-row sm:pt-0 sm:pl-2 md:flex-row md:justify-center md:pt-0">
               <button
@@ -137,6 +157,13 @@ function Home() {
               >
                 <box-icon name="left-arrow-alt" size="sm"></box-icon>
                 Sair
+              </button>
+              <button
+                onClick={handleExcluide}
+                className="inline-flex cursor-pointer items-center gap-2 rounded-lg bg-red-500 px-6 py-2.5 font-semibold text-white shadow-md transition-all hover:bg-red-600 hover:shadow-lg active:scale-95"
+              >
+                <box-icon name="eraser" size="sm"></box-icon>
+                Excluir Conta
               </button>
             </div>
           </div>
