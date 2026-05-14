@@ -39,6 +39,7 @@ function Home() {
       if (result.isConfirmed) {
         // Chama a função para exclusão do usuário e depois faz logout
         deletarUser();
+        handleLogout();
       }
     });
   }
