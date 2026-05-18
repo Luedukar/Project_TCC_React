@@ -213,7 +213,7 @@ export async function deletarUser() {
   });
 
   if (!response.ok) {
-    throw new Error("Erro ao deletar usuário");
+    return false;
   }
-  return data;
+  return true;
 }

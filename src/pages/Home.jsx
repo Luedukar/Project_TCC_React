@@ -27,8 +27,24 @@ function Home() {
 
   async function deletarUserFunction() {
     const result = await deletarUser();
-    handleLogout();
-    console.log("Usuário deslogado após exclusão da conta.");
+    if (!result) {
+      Swal.fire({
+        position: "top-end",
+        icon: "error",
+        title: "Falha ao deletar conta. Tente novamente.",
+        showConfirmButton: false,
+        timer: 1750,
+      });
+    } else {
+      handleLogout();
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Sua conta foi excluída com sucesso.",
+        showConfirmButton: false,
+        timer: 1750,
+      });
+    }
   }
 
   // Função para exibir aviso de exclusão de conta usando SweetAlert2, caso confirme, chama a função de exclusão do usuário e depois faz logout, do contraio somente cancela a ação
