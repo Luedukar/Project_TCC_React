@@ -19,6 +19,11 @@ export default function Cadastro() {
     dataNascimento: "",
   });
 
+  // recebe o email e verifica se ele é válido, se for, retorna true, se não, retorna false
+  function validarEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
   // Faz o envio do formulario quando eu usar o type submit
   async function handleSubmit(e) {
     // Impede do formulario recarregar
@@ -27,6 +32,13 @@ export default function Cadastro() {
     // Verifica se as senhas coincidem, se não, exibe alerta
     if (formData.senha !== formData.confirmarSenha) {
       setMensagem("As senhas não coincidem!");
+      setTipoMensagem("erro");
+      return;
+    }
+
+    // Verifica se o email é válido, se não, exibe alerta
+    if (!validarEmail(formData.email)) {
+      setMensagem("Por favor, insira um email válido!");
       setTipoMensagem("erro");
       return;
     }
