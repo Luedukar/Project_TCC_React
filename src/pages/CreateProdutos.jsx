@@ -86,7 +86,7 @@ export default function CreateProdutos() {
           />
 
           <Form
-            type="text"
+            type="url"
             placeholder="Link do produto"
             value={formData.linkProduto}
             set={setFormData}

@@ -217,3 +217,23 @@ export async function deletarUser() {
   }
   return true;
 }
+
+// Função para enviar e-mail de recuperação de senha
+export async function emailRecoverPassword() {
+  const response = await fetch(`${API_URL}/emailRecoverPassword`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify({ email }), // endereço de e-mail para ser usado
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.erro);
+  }
+
+  return data;
+}

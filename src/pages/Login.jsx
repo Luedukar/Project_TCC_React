@@ -58,7 +58,7 @@ export default function Login() {
         <div className="pt-[15px] pb-[20px]">
           <a
             className="m-[5px] p-[20px] text-base text-blue-400 transition-colors duration-200 hover:text-blue-600 hover:underline"
-            href="#"
+            href="/recuperar-senha"
           >
             Esqueceu sua senha?
           </a>
