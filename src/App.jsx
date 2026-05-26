@@ -8,6 +8,8 @@ import Layout from "./components/Layout";
 import CreateProdutos from "./pages/CreateProdutos";
 import DuploFator from "./pages/DuploFator";
 import RecuperarSenha from "./pages/RecuperarSenha";
+import ValidarRecuperacaoSenha from "./pages/ValidarRecuperacaoSenha";
+import RedefinirSenha from "./pages/RedefinirSenha";
 
 /* Os componentes a serem renderizados no App */
 function App() {
@@ -28,6 +30,11 @@ function App() {
         />
         <Route path="/duplo-fator" element={<DuploFator />} />
         <Route path="/recuperar-senha" element={<RecuperarSenha />} />
+        <Route
+          path="/validar-recuperacao-senha"
+          element={<ValidarRecuperacaoSenha />}
+        />
+        <Route path="/redefinir-senha" element={<RedefinirSenha />} />
         {/* Segunda rota: Rota privada (tela após o login), só vai se passar pelo PrivateRoute */}
         <Route path="/home" element={<PrivateRoute children={<Home />} />} />
         {/* Terceira rota: Rota privada para criação de produtos, só vai se passar pelo PrivateRoute */}

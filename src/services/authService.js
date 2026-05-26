@@ -237,3 +237,43 @@ export async function emailRecoverPassword(email) {
 
   return data;
 }
+
+// Função recebendo codigoInserido para validar duplo fator para recuperar senha
+export async function validarDuploFatorRecoverPassword(codigoInserido) {
+  const response = await fetch(`${API_URL}/autenticarDuploFatorSenha`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include", // Envia Cookies contendo o ID do 2fa que será usado
+    body: JSON.stringify({ codigoInserido }), // código a ser comparado
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.erro);
+  }
+
+  return data;
+}
+
+// Função recebendo NovaSenha para redefinição de senha
+export async function RedefinirPassword(NovaSenha) {
+  const response = await fetch(`${API_URL}/RedefinirPassword`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include", // Envia Cookies contendo o ID do 2fa que será usado
+    body: JSON.stringify({ NovaSenha }), // Nova senha
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.erro);
+  }
+
+  return data;
+}
