@@ -27,50 +27,53 @@ export default function RecuperarSenha() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-100 via-blue-50 to-white px-4 py-8">
-      <div className="hover:shadow-3xl relative w-full max-w-md rounded-2xl border border-blue-200/50 bg-white/90 p-10 shadow-2xl backdrop-blur-sm transition-all duration-300">
+    <div className="flex min-h-screen items-center justify-center bg-linear-[90deg,#e2e2e2,#c9d6ff] px-4 py-8">
+      <div className="shadow-blue relative w-full max-w-md overflow-hidden rounded-[28px] bg-white/95 p-10 shadow-2xl transition-all duration-300">
+        <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 opacity-90" />
         <button
-          onClick={() => navigate(-1)}
-          className="absolute top-4 left-4 text-gray-400 transition-colors duration-200 hover:text-gray-600"
+          className="absolute top-4 left-4 z-10 rounded-full bg-white/90 text-slate-500 shadow-sm transition-colors duration-300 hover:bg-white hover:text-slate-700"
           title="Voltar"
         >
           <box-icon
+            onClick={() => navigate(-1)}
             name="left-arrow-alt"
-            size="sm"
-            className="cursor-pointer transition-transform duration-200 hover:scale-110"
+            size="md"
+            className="pl-1.0 cursor-pointer justify-center pt-1.5"
           ></box-icon>
         </button>
-        <div className="mb-4 text-center">
-          <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg">
-            <box-icon name="key" size="lg" color="white"></box-icon>
+        <div className="relative z-10 mb-6 text-center">
+          <div className="mx-auto mb-5 inline-flex h-16 w-16 items-center justify-center rounded-full bg-white shadow-md">
+            <box-icon name="mail-send" size="lg" color="#274DF5"></box-icon>
           </div>
-          <h1 className="mb-3 bg-gradient-to-r from-blue-700 to-blue-500 bg-clip-text text-3xl font-bold text-transparent">
-            Recuperação de Senha
+          <h1 className="mb-3 text-3xl font-bold text-slate-900">
+            Solicitação de Recuperação
           </h1>
-          <p className="text-sm leading-relaxed text-gray-600">
-            Insira seu email para receber o código de recuperação de senha,
-            assim que sua identidade for validada será possivel redefinir a
-            senha.
+          <p className="text-sm leading-relaxed text-slate-600">
+            Informe o email associado à sua conta para receber o código de
+            recuperação. Verifique sua caixa de entrada e spam.
           </p>
         </div>
-        <form className="w-full space-y-6" onSubmit={handleSubmit}>
+        <form
+          className="relative z-10 w-full space-y-6"
+          onSubmit={handleSubmit}
+        >
           <Form
             type="email"
-            placeholder="Email para recuperação de senha"
+            placeholder="Email para recuperação"
             value={email.email}
             set={setEmail}
             fieldName="email"
             icon="bx bx-envelope"
           />
           <button
-            className="h-12 w-full transform rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:from-blue-600 hover:to-blue-700 hover:shadow-xl active:scale-95"
+            className="h-12 w-full transform rounded-xl bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 font-semibold text-white opacity-90 shadow-lg transition-all duration-300 hover:scale-105 hover:from-blue-700 hover:via-blue-600 hover:to-blue-700 active:scale-95"
             type="submit"
           >
-            Enviar Código
+            Solicitar Código
           </button>
         </form>
         {erro && (
-          <div className="mt-6 rounded-lg border border-red-200 bg-red-50 p-3">
+          <div className="relative z-10 mt-6 rounded-lg border border-red-200 bg-red-50 p-3">
             <p className="text-center text-sm text-red-600">{erro}</p>
           </div>
         )}

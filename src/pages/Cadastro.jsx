@@ -67,7 +67,7 @@ export default function Cadastro() {
   }
 
   return (
-    <div className="form_cadastro absolute right-[-100%] z-1 flex h-full items-center p-[40px] text-center text-black transition-all duration-[1200ms] ease-in-out sm:bottom-[0] sm:w-[50%]">
+    <div className="form_cadastro absolute right-[-110%] z-1 flex h-full w-full items-center p-[40px] text-center text-black transition-all duration-[1200ms] ease-in-out sm:bottom-[0] sm:w-[50%]">
       <form className="w-full" onSubmit={handleSubmit}>
         <h1 className="m-[-10px] pb-[5px] text-2xl sm:pb-0">
           Crie seu cadastro
@@ -132,7 +132,7 @@ export default function Cadastro() {
           iconTop="65%"
         />
         <button
-          className="mt-[20px] h-[48px] w-full cursor-pointer rounded-lg bg-blue-400 text-base font-semibold text-white shadow-[0_0_10px_rgba(0,0,0,0.1)]"
+          className="mt-[20px] h-[48px] w-full cursor-pointer rounded-lg bg-blue-400 text-base font-semibold text-white shadow-[0_0_10px_rgba(0,0,0,0.1)] transition-all duration-400 hover:scale-105 hover:bg-blue-500 active:scale-95"
           type="submit"
         >
           Criar cadastro

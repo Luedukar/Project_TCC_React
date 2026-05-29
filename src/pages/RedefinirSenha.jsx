@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { RedefinirPassword } from "../services/authService";
 import Form from "../components/Form";
@@ -11,27 +11,21 @@ export default function RedefinirSenha() {
   const [erro, setErro] = useState("");
   const navigate = useNavigate();
 
-  // Faz o envio do formulario quando eu usar o type submit
   async function handleSubmit(e) {
-    // Impede do formulario recarregar e zera a mensagem de erro
     e.preventDefault();
     setErro("");
 
-    // Verifica se as senhas coincidem, se não, exibe alerta
     if (novaSenha.novaSenha !== novaSenha.confirmarNovaSenha) {
       setErro("As senhas não coincidem!");
       return;
     }
 
-    // Envia a nova senha para a função RedefinirPassword e aguarda a resposta
     try {
       await RedefinirPassword(novaSenha.novaSenha);
-      // Caso sucesso, limpa os campos e direciona para a página de login
       setNovaSenha({
         novaSenha: "",
         confirmarNovaSenha: "",
       });
-      navigate("/");
       Swal.fire({
         position: "top-end",
         icon: "success",
@@ -39,41 +33,46 @@ export default function RedefinirSenha() {
         showConfirmButton: false,
         timer: 1750,
       });
-      // Caso erro, exibe a mensagem de erro
+      navigate("/");
     } catch (err) {
       setErro(err.message);
     }
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-100 via-blue-50 to-white px-4 py-8">
-      <div className="hover:shadow-3xl relative w-full max-w-md rounded-2xl border border-blue-200/50 bg-white/90 p-10 shadow-2xl backdrop-blur-sm transition-all duration-300">
+    <div className="flex min-h-screen items-center justify-center bg-linear-[90deg,#e2e2e2,#c9d6ff] px-4 py-8">
+      <div className="shadow-blue relative w-full max-w-md overflow-hidden rounded-[28px] bg-white/95 p-10 shadow-2xl transition-all duration-300">
+        <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 opacity-90" />
         <button
-          onClick={() => navigate(-1)}
-          className="absolute top-4 left-4 text-gray-400 transition-colors duration-200 hover:text-gray-600"
+          className="absolute top-4 left-4 z-10 rounded-full bg-white/90 text-slate-500 shadow-sm transition-colors duration-300 hover:bg-white hover:text-slate-700"
           title="Voltar"
+          onClick={() => navigate(-1)}
         >
           <box-icon
             name="left-arrow-alt"
-            size="sm"
-            className="cursor-pointer transition-transform duration-200 hover:scale-110"
+            size="md"
+            className="pl-1.0 cursor-pointer justify-center pt-1.5"
           ></box-icon>
         </button>
-        <div className="mb-8 text-center">
-          <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg">
-            <box-icon name="shield" size="lg" color="white"></box-icon>
+        <div className="relative z-10 mb-6 text-center">
+          <div className="mx-auto mb-5 inline-flex h-16 w-16 items-center justify-center rounded-full bg-white shadow-md">
+            <box-icon name="lock-alt" size="lg" color="#274DF5"></box-icon>
           </div>
-          <h1 className="mb-3 bg-gradient-to-r from-blue-700 to-blue-500 bg-clip-text text-3xl font-bold text-transparent">
-            Duplo Fator de Segurança
+          <h1 className="mb-3 text-3xl font-bold text-slate-900">
+            Defina sua nova senha
           </h1>
-          <p className="text-sm leading-relaxed text-gray-600">
-            Insira sua nova senha para redefinir sua senha.
+          <p className="text-sm leading-relaxed text-slate-600">
+            Digite e confirme a nova senha para concluir a recuperação da sua
+            conta com segurança.
           </p>
         </div>
-        <form className="w-full space-y-6" onSubmit={handleSubmit}>
+        <form
+          className="relative z-10 w-full space-y-2"
+          onSubmit={handleSubmit}
+        >
           <Form
             type="password"
-            placeholder="Nova Senha"
+            placeholder="Nova senha"
             value={novaSenha.novaSenha}
             set={setNovaSenha}
             fieldName="novaSenha"
@@ -81,22 +80,21 @@ export default function RedefinirSenha() {
           />
           <Form
             type="password"
-            placeholder="Confirmar Nova Senha"
+            placeholder="Confirmar nova senha"
             value={novaSenha.confirmarNovaSenha}
             set={setNovaSenha}
             fieldName="confirmarNovaSenha"
-            icon="bx-lock"
+            icon="bx bx-lock-keyhole"
           />
           <button
-            className="h-12 w-full transform rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:from-blue-600 hover:to-blue-700 hover:shadow-xl active:scale-95"
+            className="mt-5 h-12 w-full transform rounded-xl bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 font-semibold text-white opacity-90 shadow-lg transition-all duration-300 hover:scale-105 hover:from-blue-700 hover:via-blue-600 hover:to-blue-700 active:scale-95"
             type="submit"
           >
-            Redefinir Senha
+            Atualizar Senha
           </button>
         </form>
-        <div className="mt-4 text-center"></div>
         {erro && (
-          <div className="mt-6 rounded-lg border border-red-200 bg-red-50 p-3">
+          <div className="relative z-10 mt-6 rounded-lg border border-red-200 bg-red-50 p-3">
             <p className="text-center text-sm text-red-600">{erro}</p>
           </div>
         )}

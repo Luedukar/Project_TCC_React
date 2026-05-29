@@ -64,7 +64,7 @@ export default function Login() {
           </a>
         </div>
         <button
-          className="h-[48px] w-full cursor-pointer rounded-lg bg-blue-400 text-base font-semibold text-white shadow-[0_0_10px_rgba(0,0,0,0.1)]"
+          className="h-[48px] w-full cursor-pointer rounded-lg bg-blue-400 text-base font-semibold text-white shadow-[0_0_10px_rgba(0,0,0,0.1)] transition-all duration-400 hover:scale-105 hover:bg-blue-500 active:scale-95"
           /* O type submit para envio do formulario */
           type="submit"
         >
