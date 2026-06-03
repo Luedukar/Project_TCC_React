@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { RedefinirPassword } from "../services/authService";
 import Form from "../components/Form";
+import Swal from "sweetalert2";
 
 export default function RedefinirSenha() {
   const [novaSenha, setNovaSenha] = useState({
