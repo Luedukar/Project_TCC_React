@@ -1,5 +1,6 @@
 import { use, useEffect, useState } from "react";
 import Produtos from "../components/Produtos";
+import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
 import {
   deleteId,
@@ -234,6 +235,9 @@ function Home() {
           />
         </div>
       </main>
+      {/* Footer */}
+
+      <Footer />
     </div>
   );
 }
