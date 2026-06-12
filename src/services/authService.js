@@ -277,3 +277,22 @@ export async function RedefinirPassword(NovaSenha) {
 
   return data;
 }
+
+// Função para reenviar duplo fator
+export async function Reenviar() {
+  const response = await fetch(`${API_URL}/Reenviar`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include", // Envia Cookies contendo o 2fa atual
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.erro);
+  }
+
+  return data;
+}
