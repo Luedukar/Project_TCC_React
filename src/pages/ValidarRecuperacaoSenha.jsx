@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { validarDuploFatorRecoverPassword } from "../services/authService";
+import {
+  validarDuploFatorRecoverPassword,
+  Reenviar,
+} from "../services/authService";
 import Form from "../components/Form";
 
 export default function ValidarRecuperacaoSenha() {
@@ -20,6 +23,19 @@ export default function ValidarRecuperacaoSenha() {
         codigo: "",
       });
       navigate("/redefinir-senha");
+    } catch (err) {
+      setErro(err.message);
+    }
+  }
+
+  // Função para lidar com o clique no link de reenviar código
+  async function handleReenviar(e) {
+    e.preventDefault();
+    setErro("");
+
+    try {
+      await Reenviar();
+      alert("Código reenviado com sucesso! Verifique seu email.");
     } catch (err) {
       setErro(err.message);
     }
@@ -70,6 +86,15 @@ export default function ValidarRecuperacaoSenha() {
           >
             Confirmar Código
           </button>
+          <div className="text-center">
+            <a
+              href="#"
+              className="text-sm text-blue-600 transition-colors duration-200 hover:text-blue-800 hover:underline"
+              onClick={handleReenviar}
+            >
+              Não recebeu o código? Enviar novamente
+            </a>
+          </div>
         </form>
         {erro && (
           <div className="relative z-10 mt-6 rounded-lg border border-red-200 bg-red-50 p-3">
