@@ -9,6 +9,7 @@ export default function DuploFator() {
   });
   const [erro, setErro] = useState("");
   const navigate = useNavigate();
+  const [cooldown, setCooldown] = useState(0);
 
   // Faz o envio do formulario quando eu usar o type submit
   async function handleSubmit(e) {
@@ -36,12 +37,23 @@ export default function DuploFator() {
     setErro("");
 
     try {
-      await Reenviar();
+      const response = await Reenviar();
       alert("Código reenviado com sucesso! Verifique seu email.");
+      setCooldown(response.cooldown);
     } catch (err) {
       setErro(err.message);
     }
   }
+
+  useEffect(() => {
+    if (cooldown <= 0) return;
+
+    const timer = setInterval(() => {
+      setCooldown((prev) => prev - 1);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [cooldown]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-100 via-blue-50 to-white px-4 py-8">
@@ -89,9 +101,10 @@ export default function DuploFator() {
           <a
             href="#"
             className="text-sm text-blue-600 transition-colors duration-200 hover:text-blue-800 hover:underline"
+            disabled={cooldown > 0}
             onClick={handleReenviar}
           >
-            Não recebeu o código? Enviar novamente
+            {cooldown > 0 ? `Reenviar em ${cooldown}s` : "Reenviar código"}
           </a>
         </div>
         {erro && (
