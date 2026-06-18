@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   validarDuploFatorRecoverPassword,
@@ -10,12 +10,15 @@ export default function ValidarRecuperacaoSenha() {
   const [codigo, setCodigo] = useState({
     codigo: "",
   });
-  const [erro, setErro] = useState("");
+  const [mensagem, setMensagem] = useState("");
+  const [tipoMensagem, setTipoMensagem] = useState("");
   const navigate = useNavigate();
+  const [cooldown, setCooldown] = useState(0);
 
   async function handleSubmit(e) {
     e.preventDefault();
-    setErro("");
+    setMensagem("");
+    setTipoMensagem("");
 
     try {
       await validarDuploFatorRecoverPassword(codigo.codigo);
@@ -24,22 +27,48 @@ export default function ValidarRecuperacaoSenha() {
       });
       navigate("/redefinir-senha");
     } catch (err) {
-      setErro(err.message);
+      setMensagem(err.message);
+      setTipoMensagem("erro");
     }
   }
 
   // Função para lidar com o clique no link de reenviar código
   async function handleReenviar(e) {
     e.preventDefault();
-    setErro("");
-
+    setMensagem("");
+    setTipoMensagem("");
+    // Se estiver em cooldown, não permite reenviar e exibe a mensagem de erro
+    if (cooldown > 0) {
+      setMensagem(
+        `Por favor, aguarde ${cooldown} segundos antes de reenviar o código.`,
+      );
+      setTipoMensagem("erro");
+      return;
+    }
     try {
-      await Reenviar();
-      alert("Código reenviado com sucesso! Verifique seu email.");
+      const response = await Reenviar();
+      setMensagem("Código reenviado com sucesso! Verifique seu email.");
+      setTipoMensagem("sucesso");
+      setCooldown(response.cooldown);
     } catch (err) {
-      setErro(err.message);
+      setMensagem(err.message); //Definir a mensagem de erro para exibir na tela
+      setTipoMensagem("erro");
+      if (err.status === 429) {
+        setCooldown(err.retryAfter); //Definir o tempo de cooldown para desabilitar o link de reenviar
+      }
     }
   }
+
+  // useEffect para lidar com o cooldown do link de reenviar, decrementando o tempo a cada segundo até chegar a 0
+  useEffect(() => {
+    if (cooldown <= 0) return;
+
+    const timer = setInterval(() => {
+      setCooldown((prev) => prev - 1);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [cooldown]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-linear-[90deg,#e2e2e2,#c9d6ff] px-4 py-8">
@@ -90,15 +119,20 @@ export default function ValidarRecuperacaoSenha() {
             <a
               href="#"
               className="text-sm text-blue-600 transition-colors duration-200 hover:text-blue-800 hover:underline"
+              disabled={cooldown > 0}
               onClick={handleReenviar}
             >
-              Não recebeu o código? Enviar novamente
+              {cooldown > 0
+                ? `Reenviar em ${cooldown}s`
+                : "Não recebeu o código? Reenviar"}
             </a>
           </div>
         </form>
-        {erro && (
-          <div className="relative z-10 mt-6 rounded-lg border border-red-200 bg-red-50 p-3">
-            <p className="text-center text-sm text-red-600">{erro}</p>
+        {mensagem && (
+          <div
+            className={`mt-2 rounded-md p-3 text-sm ${tipoMensagem === "sucesso" ? "bg-green-50 text-green-800" : "bg-red-50 text-red-800"}`}
+          >
+            {mensagem}
           </div>
         )}
       </div>

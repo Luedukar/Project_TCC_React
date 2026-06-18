@@ -291,7 +291,11 @@ export async function Reenviar() {
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.erro);
+    throw {
+      message: data.erro,
+      retryAfter: data.retryAfter,
+      status: response.status,
+    };
   }
 
   return data;

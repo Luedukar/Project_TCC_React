@@ -7,7 +7,8 @@ export default function DuploFator() {
   const [codigo, setCodigo] = useState({
     codigo: "",
   });
-  const [erro, setErro] = useState("");
+  const [mensagem, setMensagem] = useState("");
+  const [tipoMensagem, setTipoMensagem] = useState("");
   const navigate = useNavigate();
   const [cooldown, setCooldown] = useState(0);
 
@@ -15,7 +16,8 @@ export default function DuploFator() {
   async function handleSubmit(e) {
     // Impede do formulario recarregar e zera a mensagem de erro
     e.preventDefault();
-    setErro("");
+    setMensagem("");
+    setTipoMensagem("");
 
     // Envia o código inserido para a função validarDuploFator e aguarda a resposta
     try {
@@ -27,24 +29,39 @@ export default function DuploFator() {
       navigate("/Home");
       // Caso erro, exibe a mensagem de erro
     } catch (err) {
-      setErro(err.message);
+      setMensagem(err.message);
+      setTipoMensagem("erro");
     }
   }
 
   // Função para lidar com o clique no link de reenviar código
   async function handleReenviar(e) {
     e.preventDefault();
-    setErro("");
-
+    setMensagem("");
+    setTipoMensagem("");
+    // Se estiver em cooldown, não permite reenviar e exibe a mensagem de erro
+    if (cooldown > 0) {
+      setMensagem(
+        `Por favor, aguarde ${cooldown} segundos antes de reenviar o código.`,
+      );
+      setTipoMensagem("erro");
+      return;
+    }
     try {
       const response = await Reenviar();
-      alert("Código reenviado com sucesso! Verifique seu email.");
+      setMensagem("Código reenviado com sucesso! Verifique seu email.");
+      setTipoMensagem("sucesso");
       setCooldown(response.cooldown);
     } catch (err) {
-      setErro(err.message);
+      setMensagem(err.message); //Definir a mensagem de erro para exibir na tela
+      setTipoMensagem("erro");
+      if (err.status === 429) {
+        setCooldown(err.retryAfter); //Definir o tempo de cooldown para desabilitar o link de reenviar
+      }
     }
   }
 
+  // useEffect para lidar com o cooldown do link de reenviar, decrementando o tempo a cada segundo até chegar a 0
   useEffect(() => {
     if (cooldown <= 0) return;
 
@@ -104,12 +121,16 @@ export default function DuploFator() {
             disabled={cooldown > 0}
             onClick={handleReenviar}
           >
-            {cooldown > 0 ? `Reenviar em ${cooldown}s` : "Reenviar código"}
+            {cooldown > 0
+              ? `Reenviar em ${cooldown}s`
+              : "Não recebeu o código? Reenviar"}
           </a>
         </div>
-        {erro && (
-          <div className="mt-6 rounded-lg border border-red-200 bg-red-50 p-3">
-            <p className="text-center text-sm text-red-600">{erro}</p>
+        {mensagem && (
+          <div
+            className={`mt-2 rounded-md p-3 text-sm ${tipoMensagem === "sucesso" ? "bg-green-50 text-green-800" : "bg-red-50 text-red-800"}`}
+          >
+            {mensagem}
           </div>
         )}
       </div>
