@@ -91,9 +91,9 @@ export default function Change() {
       </div>
 
       <div className="painel_right bottom-[-30%] z-2 flex h-[30%] w-full flex-col items-center justify-center text-white transition-all duration-[1200ms] sm:absolute sm:top-0 sm:right-[-50%] sm:h-full sm:w-[50%]">
-        <h1 className="m-[-10px] mb-[12px] text-2xl">Welcome Back!</h1>
-        <p className="mb-[12px]">Já tem uma conta?</p>
-        <button className="login-btn mt-[12px] h-[46px] w-[160px] cursor-pointer rounded-lg border border-white bg-transparent text-base font-semibold text-white shadow-none">
+        <h1 className="m-[-10px] mb-[6px] text-2xl">Welcome Back!</h1>
+        <p className="mb-[6px]">Já tem uma conta?</p>
+        <button className="login-btn mt-[6px] h-[46px] w-[160px] cursor-pointer rounded-lg border border-white bg-transparent text-base font-semibold text-white shadow-none">
           Login
         </button>
       </div>
